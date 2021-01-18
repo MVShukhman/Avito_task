@@ -1,0 +1,23 @@
+version: '3'
+services:
+  app:
+    restart: "always"
+    build: ./app
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+  db:
+    restart: "always"
+    image: "postgres"
+    env_file:
+      - ./db/database.env
+    volumes:
+      - hotel-database-data:/var/lib/postgres/api_data
+      - ./db/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    ports:
+      - "5432:5432"
+volumes:
+  hotel-database-data: # named volumes can be managed easier using docker-compose
